@@ -22,9 +22,9 @@
   const RM = matchMedia('(prefers-reduced-motion: reduce)');
 
   const VIDEO_URL = 'assets/hero-scrub.mp4';
-  const VIDEO_BYTES = 14000000;          // fallback for the loading ring when Content-Length is missing
+  const VIDEO_BYTES = 8713855;          // fallback for the loading ring when Content-Length is missing
   const POSTER_URL = 'assets/hero-poster.jpg';
-  const T_END = 35;                      // the authored length of the film in seconds; times below are on this clock
+  const T_END = 35.04;                   // the length of the film in seconds; every time below is on this clock
 
   const video = $('#hero');
   const env = $('.env');
@@ -96,22 +96,20 @@
     live: null
   }));
 
-  /* Where the crystal sits in the frame over time: x%, y%, height%, marks opacity.
-     These are authored against the keyframes; app.js converts them to screen pixels. */
+  /* Where the crystal sits in the frame over time, measured from the finished footage:
+     seconds, centre x%, centre y%, width%, height%, and how visible the registration marks are */
   const CRYSTAL = [
-    [0, 50, 50, 38, 0],
-    [5.2, 50, 50, 38, 0],
-    [6.0, 50, 50, 38, 0.9],
-    [9.0, 50, 50, 38, 0.9],
-    [10.4, 50, 50, 38, 0],
-    [14, 50, 50, 38, 0],
-    [22.6, 66, 50, 44, 0],
-    [25.0, 68, 50, 44, 0.9],
-    [26.2, 68, 49, 44, 0.75],
-    [28.2, 63, 40, 36, 0],       // out of focus: nothing left to measure
-    [30.0, 62, 32, 22, 0],
-    [32.5, 54, 36, 24, 0],
-    [35.0, 50, 38, 26, 0.8]
+    [0,     49.1, 44.8, 20.3, 61.0, 0],
+    [5.6,   49.1, 44.8, 20.0, 60.0, 0],
+    [6.4,   49.1, 44.7, 20.3, 61.0, 0.9],
+    [10.9,  49.0, 44.7, 20.4, 61.6, 0.9],
+    [11.5,  49.0, 44.7, 20.4, 61.6, 0],       // the shatter: nothing left to measure
+    [23.3,  64.0, 45.4, 22.1, 65.7, 0],
+    [24.2,  64.2, 45.4, 22.1, 65.7, 0.9],     // the sharper crystal has formed
+    [26.0,  62.5, 42.8, 18.8, 56.1, 0.7],
+    [27.2,  61.0, 40.5, 16.4, 48.0, 0],       // it steps back, the evidence takes the front
+    [33.0,  53.0, 40.6, 15.2, 36.9, 0],
+    [35.04, 49.1, 42.1, 14.0, 41.3, 0.8]      // and settles
   ];
 
   function measure() {
@@ -123,7 +121,15 @@
       [jt + 3.2 * vh, 8.5],
       [jt + 4.1 * vh, 11.5]
     ];
-    $$('[data-vt]').forEach(el => m.push([el.getBoundingClientRect().top + scrollY - vh * 0.5, +el.dataset.vt]));
+    // sections place the film on their own edges: "seconds@t+offset" is the section's top, "@b-offset" its bottom, offsets in screen heights
+    $$('[data-vts]').forEach(el => {
+      const r = el.getBoundingClientRect();
+      const top = r.top + scrollY, bottom = r.bottom + scrollY;
+      el.dataset.vts.trim().split(/\s+/).forEach(tok => {
+        const p = tok.match(/^(-?[\d.]+)@([tb])([+-][\d.]+)$/);
+        if (p) m.push([(p[2] === 't' ? top : bottom) + parseFloat(p[3]) * vh, parseFloat(p[1])]);
+      });
+    });
     const maxY = Math.max(1, document.documentElement.scrollHeight - vh);
     m.push([maxY, T_END]);
     m.sort((p, q) => p[0] - q[0]);
@@ -159,7 +165,7 @@
       if (t <= CRYSTAL[i][0]) {
         const a = CRYSTAL[i - 1], b = CRYSTAL[i];
         const f = (t - a[0]) / (b[0] - a[0] || 1);
-        return [1, 2, 3, 4].map(n => a[n] + (b[n] - a[n]) * f);
+        return [1, 2, 3, 4, 5].map(n => a[n] + (b[n] - a[n]) * f);
       }
     }
     return CRYSTAL[CRYSTAL.length - 1].slice(1);
@@ -230,7 +236,7 @@
   }
 
   function updateEnvFade(y) {
-    const op = 1 - 0.9 * smooth(y, fadeA, fadeB);
+    const op = 1 - 0.96 * smooth(y, fadeA, fadeB);
     if (Math.abs(op - envOp) < 0.01) return;
     envOp = op;
     env.style.opacity = op.toFixed(2);
@@ -265,17 +271,20 @@
   /* The registration marks follow the crystal, so the page looks measured rather than decorated */
   function updateMarks(t) {
     if (!marksEl) return;
-    const [x, y, h, a] = crystalAt(t);
+    const [x, y, w, h, a] = crystalAt(t);
     const W = innerWidth, H = innerHeight;
-    const sc = Math.max(W / 1920, H / 1080);          // object-fit: cover
-    const cx = W / 2 + (x / 100 * 1920 - 960) * sc;
-    const cy = H / 2 + (y / 100 * 1080 - 540) * sc;
-    const size = h / 100 * 1080 * sc * 1.3;
-    const key = Math.round(cx) + ',' + Math.round(cy) + ',' + Math.round(size) + ',' + a.toFixed(2);
+    const VW = video.videoWidth || 1912, VH = video.videoHeight || 1080;
+    const sc = Math.max(W / VW, H / VH);                 // object-fit: cover
+    const cx = W / 2 + (x / 100 - 0.5) * VW * sc;
+    const cy = H / 2 + (y / 100 - 0.5) * VH * sc;
+    const fw = w / 100 * VW * sc * 1.5;                  // the frame hugs the crystal, wider than tall is never needed
+    const fh = h / 100 * VH * sc * 1.26;
+    const op = a * (envOp < 0 ? 1 : envOp);
+    const key = Math.round(cx) + ',' + Math.round(cy) + ',' + Math.round(fw) + ',' + Math.round(fh) + ',' + op.toFixed(2);
     if (key === lastMark) return;
     lastMark = key;
-    marksEl.style.transform = 'translate3d(' + (cx - 150).toFixed(1) + 'px,' + (cy - 150).toFixed(1) + 'px,0) scale(' + (size / 300).toFixed(3) + ')';
-    marksEl.style.opacity = (a * (envOp < 0 ? 1 : envOp)).toFixed(2);
+    marksEl.style.transform = 'translate3d(' + (cx - 150).toFixed(1) + 'px,' + (cy - 150).toFixed(1) + 'px,0) scale(' + (fw / 300).toFixed(3) + ',' + (fh / 300).toFixed(3) + ')';
+    marksEl.style.opacity = op.toFixed(2);
   }
 
   function loadRamp() {

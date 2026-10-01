@@ -73,7 +73,7 @@ main:focus{outline:none}
 @media (pointer:coarse){.btn,.link{min-height:44px;display:inline-flex;align-items:center;justify-content:center}.link{justify-content:flex-start}}
 
 /* ---------- cards ---------- */
-.card{position:relative;border-radius:8px;background:rgba(10,12,13,.86);box-shadow:inset 0 0 0 1px var(--line);isolation:isolate}
+.card{position:relative;border-radius:8px;background:rgba(10,12,13,.9);box-shadow:inset 0 0 0 1px var(--line);isolation:isolate}
 .card-title{font:400 clamp(1.2rem,1.65vw,1.65rem)/1.2 var(--f-head);letter-spacing:-.015em}
 .dash{display:block;width:28px;height:1px;background:var(--text-secondary);margin-bottom:clamp(24px,5vh,52px)}
 
@@ -106,14 +106,15 @@ main:focus{outline:none}
 .env.video-ready ~ .ring{opacity:0;pointer-events:none}
 
 /* ---------- hero (still layout first) ---------- */
-.journey{position:relative;z-index:2}
+.journey{position:relative}
 .stage{position:relative}
 .band-1{display:grid;grid-template-areas:"a" "i" "b" "d";padding:calc(var(--nav-h) + 24px) var(--gut) 32px;row-gap:clamp(4px,1.4vh,14px)}
 .h1{display:contents}
 .h1-a,.h1-b{display:block;font:400 clamp(2.7rem,13.6vw,5.6rem)/.98 var(--f-head);letter-spacing:-.04em;padding-bottom:.12em}
 .h1-a{grid-area:a}
 .h1-b{grid-area:b;justify-self:end;text-align:right}
-.hero-img{grid-area:i;width:calc(100% + var(--gut)*2);margin-inline:calc(var(--gut)*-1);height:auto;aspect-ratio:16/9;object-fit:cover;background:var(--canvas)}
+.hero-img{grid-area:i;width:calc(100% + var(--gut)*2);margin-inline:calc(var(--gut)*-1);height:auto;aspect-ratio:1/1;object-fit:cover;object-position:49% 45%;mix-blend-mode:screen}
+@media (min-width:640px){.hero-img{aspect-ratio:4/3}}
 .hero-img.missing{visibility:hidden}
 .descr{grid-area:d;max-width:30ch;margin-top:14px;font-size:15px;color:var(--text-secondary)}
 .cue{display:none}
@@ -127,7 +128,7 @@ main:focus{outline:none}
 .c{display:inline-block}
 
 /* ---------- pain ---------- */
-.pain,.method,.track,.strategies,.partners,.cta,.footer{position:relative;z-index:2}
+.pain,.method,.track,.strategies,.partners,.cta,.footer{position:relative}
 .pain-inner{display:grid;gap:18px;padding:clamp(56px,10vh,120px) var(--gut)}
 .pain-card{padding:clamp(24px,2.4vw,40px)}
 .pain-card p{margin-top:14px;color:var(--text-secondary)}
@@ -142,7 +143,7 @@ main:focus{outline:none}
 .vf-tr{right:0;top:0;border-top-width:1px;border-right-width:1px}
 .vf-bl{left:0;bottom:0;border-bottom-width:1px;border-left-width:1px}
 .vf-br{right:0;bottom:0;border-bottom-width:1px;border-right-width:1px}
-.method-img{position:absolute;inset:18px;width:calc(100% - 36px);height:calc(100% - 36px);object-fit:cover;border-radius:2px}
+.method-img{position:absolute;inset:18px;width:calc(100% - 36px);height:calc(100% - 36px);object-fit:cover;mix-blend-mode:screen}
 .method-img.missing{visibility:hidden}
 
 /* ---------- track record ---------- */
@@ -151,7 +152,7 @@ main:focus{outline:none}
 .sec-head .label{margin-bottom:12px}
 .sec-head .label--end{margin-bottom:6px}
 .kpis{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
-.kpi{padding:clamp(22px,2.2vw,32px);display:grid;gap:0}
+.kpi{padding:clamp(22px,2.2vw,32px);display:grid;gap:0;background:rgba(10,12,13,.94)}
 .kpi .num{margin:clamp(26px,5vh,48px) 0 clamp(26px,5vh,48px);font:400 clamp(1.7rem,2.45vw,2.8rem)/1.05 var(--f-head);letter-spacing:-.03em;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .stamp{display:flex;align-items:center;gap:10px;font-size:10px}
 .dot{width:5px;height:5px;border-radius:50%;background:var(--iris-mint);opacity:.8}
@@ -187,7 +188,8 @@ main:focus{outline:none}
 .cta{min-height:78vh;display:grid;align-content:end;padding:0 var(--gut) clamp(72px,14vh,160px)}
 .cta-inner{display:grid;justify-items:center;gap:36px;text-align:center;text-shadow:var(--tshadow)}
 .cta-inner .btn{text-shadow:none}
-.cta-img{width:calc(100% + var(--gut)*2);height:auto;margin:0 calc(var(--gut)*-1) 24px;aspect-ratio:16/9;object-fit:cover}
+.cta-img{width:calc(100% + var(--gut)*2);height:auto;margin:0 calc(var(--gut)*-1) 24px;aspect-ratio:1/1;object-fit:cover;object-position:49% 42%;mix-blend-mode:screen}
+@media (min-width:640px){.cta-img{aspect-ratio:4/3}}
 .cta-img.missing{visibility:hidden}
 .h2--cta{font-size:clamp(1.9rem,4.6vw,4.4rem)}
 
@@ -213,6 +215,7 @@ html.js .rv.done{transition-delay:0s}
 body.paused *,body.paused *::before,body.paused *::after{animation-play-state:paused !important}
 
 /* ================= SCRUB MODE: the page becomes the film ================= */
+html.scrub .journey,html.scrub .pain,html.scrub .method,html.scrub .track,html.scrub .strategies,html.scrub .partners,html.scrub .cta,html.scrub .footer{z-index:2}
 html.scrub .env{display:block}
 html.scrub .marks{display:block}
 html.scrub .ring{display:block}
@@ -225,13 +228,17 @@ html.scrub .band{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-e
 html.scrub .band-1{opacity:1;visibility:visible;display:block;padding:0}
 html.scrub .band.live a{pointer-events:auto}
 html.scrub .band .btn{text-shadow:none}
+html.scrub .band{isolation:isolate}
+html.scrub .band-label{position:relative}
+/* a soft local scrim behind each text block: it dims only what drifts behind the words, the rest of the frame stays alive */
+html.scrub .h1-a::before,html.scrub .h1-b::before,html.scrub .descr::before,html.scrub .lede::before,html.scrub .band-label::before{content:"";position:absolute;z-index:-1;inset:-40% -14%;pointer-events:none;background:radial-gradient(ellipse 72% 64% at 50% 50%,rgba(4,5,5,.9),rgba(4,5,5,.82) 58%,rgba(4,5,5,0) 100%)}
 
 /* hero headline: opposite corners, the crystal between them */
 html.scrub .h1{display:block}
-html.scrub .h1-a,html.scrub .h1-b{position:absolute;font-size:clamp(3.2rem,7.4vw,8.8rem)}
+html.scrub .h1-a,html.scrub .h1-b{position:absolute;font-size:clamp(3.2rem,7vw,8.4rem)}
 html.scrub .h1-a{left:var(--gut);top:calc(var(--nav-h) + 5vh)}
-html.scrub .h1-b{right:var(--gut);bottom:12vh}
-html.scrub .descr{position:absolute;left:var(--gut);top:47vh;max-width:25ch;margin:0;font-size:clamp(14px,1.05vw,16px)}
+html.scrub .h1-b{right:var(--gut);bottom:6.5vh}
+html.scrub .descr{position:absolute;left:var(--gut);top:47vh;max-width:25ch;margin:0;font-size:clamp(14px,1.05vw,16px);color:#C5CCD0}
 html.scrub .cue{position:absolute;left:var(--gut);bottom:4.4vh;display:grid;justify-items:start;gap:10px;opacity:0;transition:opacity .8s var(--ease-out)}
 html.scrub.film .cue{opacity:1}
 
@@ -253,16 +260,16 @@ html.scrub .pain-inner{position:sticky;top:0;height:100vh;padding-block:0;grid-t
 html.scrub .pain-card:nth-child(2){margin-top:9vh}
 html.scrub .pain-card:nth-child(3){margin-top:18vh}
 
-html.scrub .method{height:210vh}
+html.scrub .method{height:250vh}
 html.scrub .method-inner{position:sticky;top:0;height:100vh;padding-block:0;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gut);align-items:center}
 html.scrub .method-copy{grid-column:1/6}
-html.scrub .viewfinder{grid-column:6/12;height:64vh}
+html.scrub .viewfinder{grid-column:6/12;height:72vh;margin-right:4.2%;transform:translateY(-4.6vh)}
 
-html.scrub .track{height:170vh}
+html.scrub .track{height:200vh}
 html.scrub .track-inner{position:sticky;top:0;height:100vh;padding-block:0;align-content:center}
 
 html.scrub .strategies{min-height:100vh;align-content:center}
-html.scrub .cta{min-height:120vh}
+html.scrub .cta{min-height:110vh}
 
 @media (max-height:560px){.cue{display:none}}
 
