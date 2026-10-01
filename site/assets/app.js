@@ -496,7 +496,7 @@
       e.preventDefault();
       const y = dest.getBoundingClientRect().top + scrollY - (scrubOn ? 0 : nav.offsetHeight);
       scrollTo({ top: Math.max(0, y), behavior: RM.matches ? 'auto' : 'smooth' });
-      history.replaceState(null, '', id);
+      try { history.replaceState(null, '', id); } catch (e) { /* sandboxed frames refuse it */ }
       dest.setAttribute('tabindex', '-1');
       dest.focus({ preventScroll: true });
     });

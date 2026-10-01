@@ -29,6 +29,7 @@
   --f-body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"DM Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --tshadow:none;
+  color-scheme:dark;
 }
 
 *,*::before,*::after{box-sizing:border-box}
