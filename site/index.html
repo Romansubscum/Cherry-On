@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CherryOn Finance: The math behind the range</title>
+<meta name="description" content="CherryOn runs real-time mathematical optimization engines that rebalance liquidity ranges on market volatility indices. On-chain, and provable.">
+<meta name="theme-color" content="#040505">
+<meta name="color-scheme" content="dark">
+<!-- DEPLOY STEP: patch og:url and og:image with the live absolute URL before zipping -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="CherryOn Finance: The math behind the range">
+<meta property="og:description" content="Volatility priced, ranges managed, exposure hedged. On-chain, and provable.">
+<meta property="og:url" content="">
+<meta property="og:image" content="">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%23040505'/%3E%3Cg fill='none' stroke='%23ECEFF0' stroke-width='1.1' stroke-linejoin='round'%3E%3Cpath d='M14.2 2.8c.3 3-1 5.3-3.4 7'/%3E%3Cpath d='M10.5 8.4l4.6 2 1.9 4.8-1.9 4.6-4.6 2-4.6-2-1.9-4.6 1.9-4.8z'/%3E%3Cpath d='M10.5 15.2L10.5 8.4M10.5 15.2L17 15.2M10.5 15.2L10.5 22M10.5 15.2L4 15.2'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/montserrat-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>document.documentElement.className+=' js static'</script>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="CherryOn, back to top">
+    <svg class="mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round" vector-effect="non-scaling-stroke"><path d="M14.2 2.8c.3 3-1 5.3-3.4 7"/><path d="M10.5 8.4l4.6 2 1.9 4.8-1.9 4.6-4.6 2-4.6-2-1.9-4.6 1.9-4.8z"/><path d="M10.5 15.2V8.4M10.5 15.2H17M10.5 15.2V22M10.5 15.2H4"/></g></svg>
+    <span>CherryOn</span>
+  </a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="#methodology">Methodology</a>
+    <a href="#strategies">Strategies</a>
+    <a href="#track">Track record</a>
+    <a href="#partners">Portfolio</a>
+  </nav>
+  <a class="btn btn--ghost glint" href="#access">Connect</a>
+</header>
+
+<!-- The fixed environment: one video plays the whole story, the page scrolls over it -->
+<div class="env" aria-hidden="true">
+  <div class="poster"></div>
+  <video id="hero" preload="none" muted playsinline tabindex="-1"></video>
+</div>
+<div class="marks" aria-hidden="true">
+  <svg viewBox="0 0 300 300" width="300" height="300" focusable="false">
+    <g fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
+      <path class="diamond" d="M150 28L272 150L150 272L28 150Z" stroke-dasharray="2 6" vector-effect="non-scaling-stroke"/>
+      <path d="M150 12v32M150 256v32M12 150h32M256 150h32" vector-effect="non-scaling-stroke"/>
+      <path d="M22 28h12M28 22v12M266 28h12M272 22v12M22 272h12M28 266v12M266 272h12M272 266v12" vector-effect="non-scaling-stroke"/>
+    </g>
+  </svg>
+</div>
+<svg class="ring" viewBox="0 0 48 48" width="34" height="34" aria-hidden="true" focusable="false">
+  <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-opacity=".18" stroke-width="2"/>
+  <circle class="ring-fill" cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="126" style="stroke-dashoffset:var(--ld,126)" transform="rotate(-90 24 24)"/>
+</svg>
+
+<main id="main" tabindex="-1">
+
+  <!-- ACT 1 and 1.5: the hero journey. The crystal condenses, rests, then cracks. -->
+  <section class="journey" id="top" aria-label="Introduction">
+    <div class="stage">
+
+      <div class="band band-1" data-a="0" data-b="1.45" data-first>
+        <h1 class="h1">
+          <span class="sr">The math behind the range.</span>
+          <span class="h1-a" data-split="11" data-spread="0.5" aria-hidden="true">The math</span>
+          <img class="hero-img" alt="" width="1920" height="1080" decoding="async" data-src="assets/crystal-hero.jpg">
+          <span class="h1-b" data-split="23" data-spread="0.5" aria-hidden="true">behind the range.</span>
+        </h1>
+        <p class="descr">Volatility priced, ranges managed, exposure hedged. On-chain, and provable.</p>
+        <div class="cue" aria-hidden="true"><span class="label">Scroll</span><i></i></div>
+      </div>
+
+      <div class="band band-2" data-a="1.6" data-b="3.3" data-ramp="0.26">
+        <p class="label band-label">Our approach</p>
+        <div class="band-body">
+          <p class="lede" data-focus>Cherry (on Finance) runs real-time mathematical optimization engines that rebalance liquidity ranges based on market volatility indices, capturing organic fee flow through disciplined, model-driven execution.</p>
+          <a class="btn btn--solid glint" href="#methodology">Read the methodology</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ACT 2: the dust becomes the backdrop of the problem -->
+  <section class="pain" id="pain" data-vt="14">
+    <div class="pain-inner">
+      <article class="card glint pain-card rv" style="--i:0;--go:20deg" data-reveal>
+        <i class="dash" aria-hidden="true"></i>
+        <h2 class="card-title">Inefficient Range Provision</h2>
+        <p>Passive liquidity routing in constant product pools leads to sustained impermanent loss and underperforming yields.</p>
+      </article>
+      <article class="card glint pain-card rv" style="--i:1;--go:140deg" data-reveal>
+        <i class="dash" aria-hidden="true"></i>
+        <h2 class="card-title">Complex Risk Architectures</h2>
+        <p>Sophisticated strategies require constant, active hedging that modern modular protocol dashboards simply cannot support.</p>
+      </article>
+      <article class="card glint pain-card rv" style="--i:2;--go:260deg" data-reveal>
+        <i class="dash" aria-hidden="true"></i>
+        <h2 class="card-title">Fragile Executions</h2>
+        <p>Slippage, sandwich attacks, and toxic order flow continually degrade edge during manual capital deployments.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ACT 3: the same particles gather again, more exact than before -->
+  <section class="method" id="methodology" data-vt="19">
+    <div class="method-inner">
+      <div class="method-copy card glint rv" data-reveal>
+        <p class="label">Our approach</p>
+        <h2 class="h2">Proprietary volatility modeling for automated range management</h2>
+        <p class="body">CherryOn runs real-time mathematical optimization engines that dynamically rebalance liquidity footprints based on market volatility indices, minimizing risk while capturing organic fee flow.</p>
+        <a class="link" href="#strategies">Read methodology <span aria-hidden="true">&rarr;</span></a>
+      </div>
+      <div class="viewfinder" aria-hidden="true">
+        <i class="vf vf-tl"></i><i class="vf vf-tr"></i><i class="vf vf-bl"></i><i class="vf vf-br"></i>
+        <img class="method-img" alt="" width="1280" height="720" loading="lazy" decoding="async" data-src="assets/crystal-method.jpg">
+      </div>
+    </div>
+  </section>
+
+  <!-- ACT 4: the crystal steps back and the evidence takes the front -->
+  <section class="track" id="track" data-vt="25">
+    <div class="track-inner">
+      <header class="sec-head rv" data-reveal>
+        <div>
+          <p class="label">Performance</p>
+          <h2 class="h2">Live track record</h2>
+        </div>
+        <p class="label label--end">Global aggregate stats</p>
+      </header>
+      <div class="kpis">
+        <article class="card glint kpi rv" style="--i:0;--go:30deg" data-reveal>
+          <p class="label">Total AUM</p>
+          <p class="num" data-count>$412.8M</p>
+          <p class="label stamp"><i class="dot"></i>Updated 1h ago</p>
+        </article>
+        <article class="card glint kpi rv" style="--i:1;--go:110deg" data-reveal>
+          <p class="label">Net yield</p>
+          <p class="num" data-count>24.12% APY</p>
+          <p class="label stamp"><i class="dot"></i>Updated 1h ago</p>
+        </article>
+        <article class="card glint kpi rv" style="--i:2;--go:200deg" data-reveal>
+          <p class="label">Sharpe ratio</p>
+          <p class="num" data-count>3.18</p>
+          <p class="label stamp"><i class="dot"></i>Updated 1h ago</p>
+        </article>
+        <article class="card glint kpi rv" style="--i:3;--go:290deg" data-reveal>
+          <p class="label">Max drawdown</p>
+          <p class="num" data-count>-4.12%</p>
+          <p class="label stamp"><i class="dot"></i>Updated 1h ago</p>
+        </article>
+      </div>
+      <p class="note rv" style="--i:4" data-reveal>Illustrative figures. Live data feed pending.</p>
+    </div>
+  </section>
+
+  <!-- ACT 5: the crystal settles, the strategies and the single call to action -->
+  <section class="strategies" id="strategies" data-vt="30">
+    <header class="sec-head rv" data-reveal>
+      <div>
+        <p class="label">Deployment</p>
+        <h2 class="h2">Active strategies</h2>
+      </div>
+      <a class="link" href="#strategies">View all strategies <span aria-hidden="true">&rarr;</span></a>
+    </header>
+    <div class="strat-grid">
+      <article class="card glint strat rv" style="--i:0;--go:60deg" data-reveal>
+        <div class="strat-top"><h3 class="card-title">Alpha Vault: Arbitrum</h3><span class="tag">Risk: Moderate</span></div>
+        <p>Automated narrow liquidity positioning on high-volume, bluechip pairings, optimized to yield maximum trade commissions.</p>
+        <svg class="spark" viewBox="0 0 200 64" aria-hidden="true" focusable="false">
+          <path class="grid" d="M0 16H200M0 32H200M0 48H200"/>
+          <path class="ln" pathLength="1" d="M0 52L22 44L40 48L62 36L84 40L106 28L128 31L150 20L172 22L200 8"/>
+        </svg>
+      </article>
+      <article class="card glint strat rv" style="--i:1;--go:180deg" data-reveal>
+        <div class="strat-top"><h3 class="card-title">Epsilon Stable: Mainnet</h3><span class="tag">Risk: Low</span></div>
+        <p>Delta-neutral yield farming on pegged stablecoin brackets utilizing continuous dynamic range adjustments.</p>
+        <svg class="spark" viewBox="0 0 200 64" aria-hidden="true" focusable="false">
+          <path class="grid" d="M0 16H200M0 32H200M0 48H200"/>
+          <path class="ln" pathLength="1" d="M0 44L24 42L48 40L72 37L96 35L120 31L144 28L168 24L200 18"/>
+        </svg>
+      </article>
+      <article class="card glint strat rv" style="--i:2;--go:300deg" data-reveal>
+        <div class="strat-top"><h3 class="card-title">Theta Volatility: Base</h3><span class="tag">Risk: High</span></div>
+        <p>Wide-range correlation captures targeting momentum pairs using aggressive volatility feedback loops.</p>
+        <svg class="spark" viewBox="0 0 200 64" aria-hidden="true" focusable="false">
+          <path class="grid" d="M0 16H200M0 32H200M0 48H200"/>
+          <path class="ln" pathLength="1" d="M0 50L20 38L38 46L58 24L80 34L100 14L122 30L146 12L170 26L200 6"/>
+        </svg>
+      </article>
+    </div>
+  </section>
+
+  <section class="partners" id="partners" aria-labelledby="partners-h">
+    <h2 class="label rv" id="partners-h" data-reveal>Institutional integrations &amp; trusted partners</h2>
+    <ul class="partner-row">
+      <li class="card glint rv" style="--i:0;--go:40deg" data-reveal>Partner 01</li>
+      <li class="card glint rv" style="--i:1;--go:100deg" data-reveal>Partner 02</li>
+      <li class="card glint rv" style="--i:2;--go:160deg" data-reveal>Partner 03</li>
+      <li class="card glint rv" style="--i:3;--go:220deg" data-reveal>Partner 04</li>
+      <li class="card glint rv" style="--i:4;--go:280deg" data-reveal>Partner 05</li>
+      <li class="card glint rv" style="--i:5;--go:340deg" data-reveal>Partner 06</li>
+    </ul>
+    <aside class="audit card glint rv" data-reveal>
+      <p>Review our audit reports and open-source smart contract security documentation on GitHub.</p>
+      <a class="btn btn--solid glint" href="#partners">View on GitHub <span aria-hidden="true">&nearr;</span></a>
+    </aside>
+  </section>
+
+  <section class="cta" id="access" data-vt-end>
+    <img class="cta-img" alt="" width="1920" height="1080" loading="lazy" decoding="async" data-src="assets/crystal-final.jpg">
+    <div class="cta-inner rv" data-reveal>
+      <h2 class="h2 h2--cta">Institutional DeFi access</h2>
+      <a class="btn btn--solid btn--lg glint" href="#access">Request access</a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="foot-cols">
+    <div>
+      <p class="label">Docs</p>
+      <ul><li><a href="#">Architecture</a></li><li><a href="#">API Reference</a></li><li><a href="#">Whitepaper</a></li><li><a href="#">GitHub</a></li></ul>
+    </div>
+    <div>
+      <p class="label">Contracts</p>
+      <ul><li><a href="#">Ethereum Mainnet</a></li><li><a href="#">Arbitrum One</a></li><li><a href="#">Base</a></li><li><a href="#">Optimism</a></li></ul>
+    </div>
+    <div>
+      <p class="label">Socials</p>
+      <ul><li><a href="#">X / Twitter</a></li><li><a href="#">LinkedIn</a></li><li><a href="#">Telegram</a></li><li><a href="#">Discord</a></li></ul>
+    </div>
+    <div>
+      <p class="label">Legal</p>
+      <ul><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Risk Disclosure</a></li><li><a href="#">Cookie Policy</a></li></ul>
+    </div>
+  </div>
+  <div class="foot-legal">
+    <p>The information provided on this site is for informational purposes only and does not constitute financial advice. Quantitative strategies involve significant risk of capital loss. Past performance is not indicative of future results. Access is restricted to qualified institutional entities.</p>
+    <p>&copy; 2026 CherryOn. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="assets/app.js" defer></script>
+</body>
+</html>

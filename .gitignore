@@ -1,0 +1,4 @@
+node_modules/
+review/
+*.zip
+.DS_Store
